@@ -1,6 +1,8 @@
 //addElements
 
 let body = document.body;
+let header = document.querySelector(".header");
+let main = document.querySelector(".main");
 let contentRender = body.querySelector(".table__body");
 let template = body.querySelector("#template").content;
 let sort = body.querySelector(".currency__sort");
@@ -8,6 +10,7 @@ let filter = body.querySelector(".currency__filter");
 let searchInput = body.querySelector(".search-input");
 let elItem = template.cloneNode(true);
 let modalBtn = body.querySelector(".modal-btn");
+let loader = body.querySelector(".loader");
 
 
 //get from fetch;
@@ -24,6 +27,15 @@ async function getData(url) {
    try {
     const rawData = await fetch(url);
     const { data } = await  rawData.json();
+    
+    let status = rawData.status;
+
+    // console.log(status);
+    //loading
+    
+    if (status) {
+      loader.classList.add("d-none"); 
+    }
 
     currencies = data.map(obj => ( {
        ...obj,
@@ -33,6 +45,9 @@ async function getData(url) {
 
     localStorage.setItem("currencies", JSON.stringify(currencies));
    } catch (error) {
+    setTimeout(() => {
+      loader.classList.add("d-none")
+    }, 1000);
     console.error(error);
     console.error("Please, connnect to network!");
    } 
@@ -121,7 +136,5 @@ setTimeout(() => {
         localStorage.setItem("result", JSON.stringify("result"));
     }
 }, 10000);
-  
-
 
 render(currencies);
