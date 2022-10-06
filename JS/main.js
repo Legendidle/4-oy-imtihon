@@ -30,13 +30,6 @@ async function getData(url) {
     
     let status = rawData.status;
 
-    // console.log(status);
-    //loading
-    
-    if (status) {
-      loader.classList.add("d-none"); 
-    }
-
     currencies = data.map(obj => ( {
        ...obj,
        Diff : obj.Diff*1,
@@ -45,12 +38,13 @@ async function getData(url) {
 
     localStorage.setItem("currencies", JSON.stringify(currencies));
    } catch (error) {
-    setTimeout(() => {
-      loader.classList.add("d-none")
-    }, 1000);
+    
     console.error(error);
     console.error("Please, connnect to network!");
    } 
+   finally {
+      loader.classList.add("d-none"); 
+   }
 }
 
 getData("https://pressa-exem.herokuapp.com/api-49");
@@ -63,11 +57,14 @@ console.log(currencies);
 function createElement(currency) {
   let elItem = template.cloneNode(true);
 
+  // = currency.id
   elItem.querySelector(".table-id").textContent = currency.Code;
   elItem.querySelector(".table-name").textContent = currency.CcyNm_UZ;
   elItem.querySelector(".table-name-code").textContent = currency.Ccy;
   elItem.querySelector(".table-price").textContent = currency.Diff;
   elItem.querySelector(".table-update").textContent = currency.Date;
+  // elItem.querySelector(".bookmark-btn").dataset.id = currency.id;
+  elItem.querySelector(".bookmark-img").dataset.id = currency.id;
 
   return elItem
 }
@@ -136,5 +133,52 @@ setTimeout(() => {
         localStorage.setItem("result", JSON.stringify("result"));
     }
 }, 10000);
+
+
+//bookmark
+let basket = [];
+let copyData = [...currencies];
+let badge = body.querySelector(".badge-number");
+
+
+//bookmarkPush
+function addObj(id) {
+  let findObj = copyData.find(obj => {
+    return obj.id == id
+  }) 
+  if(!basket.includes(findObj)){
+  basket.push(findObj)
+} 
+}
+
+
+//bookmarkRemove
+function removeObj(id) {
+  let index = basket.findIndex(obj => {
+    return obj.id == id
+  }) 
+
+  basket.splice(index, 1)
+}
+
+
+contentRender.addEventListener("click", (e) => {
+
+  if(e.target.matches(".bookmark-img")){
+
+    if(e.target.src.includes("-fill")) {
+      e.target.src = "./img/bookmark.svg"
+      removeObj(e.target.dataset.id)
+    }else {
+      e.target.src = "./img/bookmark-fill.svg"
+      addObj(e.target.dataset.id)
+    }
+    badge.textContent = basket.length;
+    // console.log(basket);
+  }
+
+})
+
+
 
 render(currencies);

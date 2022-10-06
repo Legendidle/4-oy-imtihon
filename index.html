@@ -32,6 +32,14 @@
                     </ul>
 
                     <input class="form-control search-input w-25" type="search" placeholder="Search" aria-label="Search">
+
+                    <button type="button" class="btn-basket btn ms-5 position-relative bg-black">
+                      <img class="img-basket" src="./img/basket.png" alt="basket" width="40" height="40">
+                      
+                      <span class="badge-number position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                        0 
+                      </span>
+                    </button>
                   </div>
                 </div>
             </nav>
@@ -64,6 +72,7 @@
                     <th scope="col">Name Code</th>
                     <th scope="col">Price</th>
                     <th scope="col">Update</th>
+                    <th scope="col">Choosen</th>
                   </tr>
                 </thead>
 
@@ -101,12 +110,17 @@
 </div>
 
     <template id="template">
-        <tr>
+        <tr class="table">
           <th scope="row" class="table-id" data-id="1">1</th>
           <td class="table-name">Mark</td>
           <td class="table-name-code">Otto</td>
           <td class="table-price">@mdo</td>
-          <td class="table-update"></td>
+          <td class="table-update">da</td>
+          <td class="table-bookmark">
+            <button class="bookmark-btn btn p-0 m-0 border-0">
+              <img class="bookmark-img"  src="./img/bookmark.svg" alt="bookmark">
+            </button>
+          </td>
         </tr>
     </template>
     
